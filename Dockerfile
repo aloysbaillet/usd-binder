@@ -6,11 +6,15 @@ ENV USER=${NB_USER} \
     NB_UID=${NB_UID} \
     HOME=/home/${NB_USER}
 
-COPY . ${HOME}
-USER root
-RUN chown -R ${NB_UID} ${HOME}
-USER ${NB_USER}
+WORKDIR ${HOME}
 
 ADD https://developer.apple.com/augmented-reality/quick-look/models/retrotv/tv_retro.usdz ${HOME}
+COPY . ${HOME}
+
+USER root
+RUN chown -R ${NB_UID} ${HOME} && \
+    rm -rf ${HOME}/work
+
+USER ${NB_USER}
 
 ENTRYPOINT []
